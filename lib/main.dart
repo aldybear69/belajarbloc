@@ -5,8 +5,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 void main() {
   BlocOverrides.runZoned(
-    () => runApp(const BlocCaraSatu()),
-    // () => runApp(const BlocCaraDua()),
+    // () => runApp(const BlocCaraSatu()),
+    () => runApp(const BlocCaraDua()),
     blocObserver: AppBlocObserver(),
   );
 }
