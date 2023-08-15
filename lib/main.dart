@@ -1,31 +1,47 @@
-import 'package:belajarbloc/screen/cara_satu_bloc_from_docs.dart';
-import 'package:belajarbloc/screen/cara_dua_bloc_from_vscode_extension.dart';
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'src/cubit/barrel_theme.dart';
+import 'src/bloc/bloc_observer/global_observer.dart';
+
+import 'src/routes/routes_pages.dart';
+
 void main() {
   BlocOverrides.runZoned(
-    // () => runApp(const BlocCaraSatu()),
-    () => runApp(const BlocCaraDua()),
+    () => runApp(const MyApp()),
     blocObserver: AppBlocObserver(),
   );
 }
 
-/// Custom [BlocObserver] that observes all bloc and cubit state changes.
-class AppBlocObserver extends BlocObserver {
-  @override
-  void onChange(BlocBase bloc, Change change) {
-    super.onChange(bloc, change);
-    if (bloc is Cubit) {
-      debugPrint("PAKE CUBIT");
-    } else {
-      debugPrint("PAKE BLOC");
-    }
-  }
+class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
 
   @override
-  void onTransition(Bloc bloc, Transition transition) {
-    super.onTransition(bloc, transition);
-    debugPrint(transition.toString());
+  Widget build(BuildContext context) {
+    //! jadi ketika kita sudah menggunakan BlocProvider
+    //! maka tidak perlu lagi menggunakan instansiasi seperti :
+    //! "final ThemeCubit _themeCubit = ThemeCubit();"
+    return BlocProvider(
+      create: (_) => ThemeCubit(),
+      child: BlocBuilder<ThemeCubit, ThemeData>(
+        // context harus diisi jika ada widget yg membutuhkan
+        builder: (_, theme) {
+          return MaterialApp(
+            theme: theme,
+            // home: const HomePage(),
+            initialRoute: AppRoutes.initialRoute,
+            routes: AppRoutes.routes,
+            onGenerateRoute: (routeSettings) {
+              //check log routeSettings value
+              log(routeSettings.toString());
+              //get routes with transition
+              return AppRoutes.routesWithTransition(routeSettings);
+            },
+          );
+        },
+      ),
+    );
   }
 }

@@ -8,7 +8,7 @@ class CBloc extends Bloc<CEvent, CState> {
   CBloc() : super(const CInitial(10)) {
     // ! Cara 1 Pake if else dipisah
     // on<CEvent>((event, emit) {
-    //   if (event is CounterIncrementPressed) {
+    //   if (event is CounterIncrementEvent) {
     //     emit(CInitial(state.number + event.number));
     //   } else {
     //     emit(CInitial(state.number - 1));
